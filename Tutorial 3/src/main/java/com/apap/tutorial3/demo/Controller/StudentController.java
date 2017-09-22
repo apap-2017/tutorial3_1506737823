@@ -30,7 +30,11 @@ public class StudentController {
     }
 
     @RequestMapping("/student/view")
-    public String view (Model model, @RequestParam(value = "npm", required = true) String npm){
+    public String view (Model model, @RequestParam(value = "npm", required = false) String npm){
+        if(npm == null){
+            return "viewfail";
+        }
+
         StudentModel student = studentService.selectStudent(npm);
         model.addAttribute("student", student);
         return "view";
@@ -45,6 +49,7 @@ public class StudentController {
 
     @RequestMapping("/student/view/{npm}")
     public String view (Model model, @PathVariable Optional<String> npm){
+
         StudentModel student = studentService.selectStudent(npm.get());
 
         if(student == null){
@@ -65,6 +70,12 @@ public class StudentController {
             model.addAttribute("output", "Student telah dihapus");
         }
 
+        return "delete";
+    }
+
+    @RequestMapping("/student/delete")
+    public String delete (Model model){
+        model.addAttribute("output", "Tolong masukkan parameter");
         return "delete";
     }
 }
